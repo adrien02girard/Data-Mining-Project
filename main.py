@@ -18,11 +18,8 @@ st.title('Data Analysis and Visualization Application')
 #-------------------------------------- upload et display la data ----------------------------------------------
 
 # Allow users to upload their own dataset
-uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
+uploaded_file = st.file_uploader("Choose a data file", type="data")
 
-# a retirer plus tard
-current_directory = os.path.dirname(__file__)
-#uploaded_file = os.path.join(current_directory, "iris.csv")
 
 if uploaded_file is not None:
     # Allow users to specify separator and encoding
@@ -30,7 +27,7 @@ if uploaded_file is not None:
     encoding = st.text_input("Enter the file encoding", value='utf-8')
 
     # Load the data with low_memory=False to prevent dtype warning
-    df = pd.read_csv(uploaded_file, sep=separator, encoding=encoding, low_memory=False)
+    df = pd.read_csv(uploaded_file, sep=separator, encoding=encoding, low_memory=False, header=None)
     # Display a preview of the first and last lines of data
 
     st.header('Data Preview')
