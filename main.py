@@ -195,7 +195,7 @@ if uploaded_file is not None:
         elif visualization_type in no_choice :
             if visualization_type == "Heatmap" :
                 st.subheader("Heatmap")
-                fig = px.imshow(df[numeric_cols].corr(), text_auto=True, aspect="auto")
+                fig = px.imshow(df[df.columns].corr(), text_auto=True, aspect="auto")
                 st.plotly_chart(fig)
 
         elif visualization_type == "Scatter plot":
