@@ -1,4 +1,4 @@
-#streamlit run "C:\Users\33781\OneDrive - Efrei\Bureau\_EFREI\_M1\_S8\data mining\projet\main.py" [ARGUMENTS]
+
 
 import os
 import streamlit as st
