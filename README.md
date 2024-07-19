@@ -8,3 +8,5 @@ Part II: Data Pre-processing and Cleaning
 Part III: Visualization of the cleaned data
 Part IV: Clustering or prediction
 Part V: Learning Evaluation
+
+https://github.com/adrien02girard/Data-Mining-Project
