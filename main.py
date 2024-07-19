@@ -42,7 +42,8 @@ if uploaded_file is not None:
     # Provide a basic statistical summary
     st.subheader('Data Summary')
     st.write("This dataset contains ", df.shape[0], " rows and ", df.shape[1]," columns")
-    st.write("The column names are :", df.columns.tolist())
+    if st.checkbox("Show column names"):
+        st.write("The column names are :", df.columns.tolist())
 
     col1, col2 = st.columns(2)
     with col1:
