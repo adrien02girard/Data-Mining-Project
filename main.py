@@ -214,7 +214,7 @@ if uploaded_file is not None:
 
     col1, col2, col3 = st.columns(3)
 
-    with col1 :
+    with col1:
         task = st.radio(
             "Choose a task",
             ("None", "Clustering", "Prediction")
@@ -222,7 +222,7 @@ if uploaded_file is not None:
 
     if task == "Clustering":
 
-        with col2 :
+        with col2:
             clustering_algo = st.radio(
                 "Choose a clustering algorithm",
                 ("K-Means", "DBSCAN")
@@ -256,12 +256,12 @@ if uploaded_file is not None:
             col1, col2 = st.columns(2)
             cluster_counts = df['Cluster'].value_counts().sort_index()
 
-            with col1 :
+            with col1:
                 st.write("Number of data points in each cluster:")
                 st.write(cluster_counts)
 
             cluster_centers = pd.DataFrame(kmeans.cluster_centers_, columns=numeric_cols)
-            with col2 :
+            with col2:
                 st.write("Cluster centers (for K-Means):")
                 st.write(cluster_centers)
 
@@ -278,9 +278,9 @@ if uploaded_file is not None:
             st.subheader("2D Cluster Visualization")
 
             col1, col2 = st.columns(2)
-            with col1 :
+            with col1:
                 x = st.radio("Select X axis column", numeric_cols)
-            with col2 :
+            with col2:
                 y = st.radio("Select y axis column", numeric_cols)
             fig = px.scatter(df, x=x, y=y, color='Cluster',
                              title="2D Scatter Plot of Clusters")
@@ -292,32 +292,32 @@ if uploaded_file is not None:
 
             col1, col2 = st.columns(2)
 
-            with col1 :
+            with col1:
                 st.write("Number of data points in each cluster:")
                 st.write(cluster_counts)
 
             cluster_density = df.groupby('Cluster').apply(
                 lambda x: x.shape[0] / (x[numeric_cols[0]].max() - x[numeric_cols[0]].min()))
-            with col2 :
+            with col2:
                 st.write("Density of each cluster (for DBSCAN):")
                 st.write(cluster_density)
 
     elif task == "Prediction":
-        with col2 :
+        with col2:
             prediction_algo = st.radio(
                 "Choose a prediction algorithm",
                 ("Logistic Regression", "Random Forest")
             )
-        with col3 :
+        with col3:
             target = st.radio(
                 "Choose the target column",
                 categorical_cols)
 
+        X = df.drop(columns=[target])
+        y = df[target]
 
         if prediction_algo == "Logistic Regression":
             logistic_reg = LogisticRegression()
-            X = df.drop(columns=[target])
-            y = df[target]
             logistic_reg.fit(X, y)
             df['Prediction'] = logistic_reg.predict(X)
             st.write("Predicted data:")
@@ -325,22 +325,32 @@ if uploaded_file is not None:
 
             # Visualisation des prédictions
             st.subheader("Prediction Visualization")
-            fig = px.scatter(df, x=numeric_cols[0], y=numeric_cols[1], color='Prediction',
+
+            # Utilisation de PCA pour réduire les dimensions à 2 pour la visualisation
+            pca = PCA(n_components=2)
+            X_pca = pca.fit_transform(X)
+            df_pca = pd.DataFrame(data=X_pca, columns=['PCA1', 'PCA2'])
+            df_pca['Prediction'] = df['Prediction']
+            fig = px.scatter(df_pca, x='PCA1', y='PCA2', color='Prediction',
                              title="2D Scatter Plot of Predictions")
             st.plotly_chart(fig)
 
         elif prediction_algo == "Random Forest":
             n_estimators = st.slider("Number of estimators", 10, 100, 50)
             random_forest = RandomForestClassifier(n_estimators=n_estimators)
-            X = df.drop(columns=[target])
-            y = df[target]
             random_forest.fit(X, y)
             df['Prediction'] = random_forest.predict(X)
             st.write("Predicted data:")
             st.write(df.head())
 
             st.subheader("Prediction Visualization")
-            fig = px.scatter(df, x=numeric_cols[0], y=numeric_cols[1], color='Prediction',
+
+            # Utilisation de PCA pour réduire les dimensions à 2 pour la visualisation
+            pca = PCA(n_components=2)
+            X_pca = pca.fit_transform(X)
+            df_pca = pd.DataFrame(data=X_pca, columns=['PCA1', 'PCA2'])
+            df_pca['Prediction'] = df['Prediction']
+            fig = px.scatter(df_pca, x='PCA1', y='PCA2', color='Prediction',
                              title="2D Scatter Plot of Predictions")
             st.plotly_chart(fig)
 
